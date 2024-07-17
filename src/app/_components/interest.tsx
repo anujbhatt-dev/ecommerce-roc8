@@ -2,8 +2,24 @@
 import { useEffect, useState } from "react"
 import {api} from "~/trpc/react"
 
-export default function() {
+export default function Interest() {
+    const setInterest = api.user.setCategoryInterest.useMutation({
+        onSettled:() => myCategories.refetch()
+    })
+    const removeInterest = api.user.removeCategoryInterest.useMutation({
+        onSettled:() => myCategories.refetch()
+    })
     const categories = api.interest.getCategories.useQuery();
+    const myCategories = api.user.getMyCategories.useQuery()
+
+    const setCategory = (id:number) => {
+        setInterest.mutate(id)
+    }
+
+    const removeCategory = (id:number) => {
+        removeInterest.mutate(id)
+    }
+
     return (
         <main className="flex justify-center">
             <div className="flex flex-col items-center h-[691px] w-[578px] border rounded-[20px]  my-[30px]">
@@ -14,17 +30,17 @@ export default function() {
                     <ul>
                         {/* {JSON.stringify(categories?.data)} */}
                         {categories?.data?.map((item)=>{
-                            return <div className="flex  mb-[20px] inter capitalize">
+                            return <div key={item.id} className="flex  mb-[20px] inter capitalize">
                                     <div className="mr-[10px] text-[16px] flex">
-                                        {/* {item.done?
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        {myCategories?.data?.includes(item.id)?
+                                        <svg className="cursor-pointer" onClick={()=>removeCategory(item.id)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="24" height="24" rx="4" fill="black"/>
                                         <path d="M5 13L8.5 17L19 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>:
-                                        } */}
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg  className="cursor-pointer" onClick={()=>setCategory(item.id)}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="24" height="24" rx="4" fill="#CCCCCC"/>
                                         </svg>   
+                                        }
                                     </div>
                                     <span className="capitalize">{item.name}</span>
                             </div>

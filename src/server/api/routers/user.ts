@@ -167,4 +167,43 @@ export const userRouter = createTRPCRouter({
         }
       }
   }),
+
+  visited:protectedProcedure.mutation(({ctx})=>{
+      return {
+          name:ctx.user.name,
+          email:ctx.user.email,
+          id:ctx.user.id,
+      }
+  }),
+
+
+  getMyCategories:protectedProcedure.query(async ({ctx,input})=>{
+      const myCategories = await ctx.db.userCategory.findMany({
+          where:{
+              userId:ctx.user.id,
+          },
+      })
+      const categories = myCategories.map(item => item.categoryId)
+      return [...categories]
+  }),
+
+  setCategoryInterest:protectedProcedure.input(z.number()).mutation(async ({ctx,input})=>{
+    const interest = await ctx.db.userCategory.create({
+        data:{
+            userId:ctx.user.id,
+            categoryId:input
+        }
+    })
+    return interest
+  }),
+
+  removeCategoryInterest:protectedProcedure.input(z.number()).mutation(async ({ctx,input})=>{
+    const interest = await ctx.db.userCategory.deleteMany({
+        where:{
+            userId:ctx.user.id,
+            categoryId:input
+        }
+    })
+    return interest
+  })
 });

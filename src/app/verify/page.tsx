@@ -1,6 +1,6 @@
 import Verify from "../_components/verify"
 
-export default function () {
+export default function VerifyComponent() {
   return (
     <Verify/>
   )

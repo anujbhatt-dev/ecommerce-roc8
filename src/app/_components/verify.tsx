@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 import {api} from "~/trpc/react"
 
-export default function () {
+export default function Verify() {
     const [digits, setDigits] = useState<number[]>(Array(8).fill(-1));
     const [state,setState] = useState<string>("")
     const router = useRouter();

@@ -14,7 +14,7 @@ interface FormData {
   password: string;
 }
 
-export default function () {
+export default function Login() {
   const [formData, setFormData] = useState<FormData>({ email: "", password: "" })
   const {setUser} = useUserContext();
   const router = useRouter()
@@ -49,9 +49,6 @@ export default function () {
     user.mutate(formData);
   }
 
-  useEffect(()=>{
-    
-},[])
 
   return (
     <main className="flex justify-center">

@@ -23,16 +23,16 @@ export default function Form() {
   }
   const user = api.user.create.useMutation({
     onSuccess:(res)=>{  
-      const query = new URLSearchParams({email:formData.email}).toString();
       console.log(res.message);
-      router.push(`/verify?${query}`)
       setFormData({ name: "", email: "", password: "" })
     }
   });
   
   const submitHandler = ( e: FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
-    console.log(formData);
+    const query = new URLSearchParams({email:formData.email}).toString();
+    router.push(`/verify?${query}`)
+    console.log(formData );
     user.mutate(formData);
 
   }
