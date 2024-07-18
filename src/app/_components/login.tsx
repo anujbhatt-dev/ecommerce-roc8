@@ -29,6 +29,7 @@ export default function Login() {
         console.log(res);
         //set cookie named token here
         Cookies.set('token', res.token , { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('fake', "res.token" , { expires: 1, secure: true, sameSite: 'strict' });
         router.push("/interest")
     },
     onError:(error)=>{

@@ -79,7 +79,22 @@ interface DecodedToken extends JwtPayload {
 
 export const protectedProcedure = publicProcedure.use(async ({ctx,next}) => {
   // const { ctx  } = opts;
-  const token = ctx.headers.get("cookie")?.split('=')[1]
+
+  const keyValuePairs = ctx.headers.get("cookie")?.split(';');
+
+// Step 2: Initialize a variable to store the token value
+  let token = null;
+
+  // Step 3: Iterate over keyValuePairs to find the token value
+  keyValuePairs?.forEach(pair => {
+      const [key, value] = pair.split('=');
+      if (key?.trim() === "token") {
+          token = value?.trim(); // Extract the token value
+      }
+  });
+  
+  
+  // const token = ctx.headers.get("cookie")?.split('=')[1]
   // console.log(token,headers);
   
   
