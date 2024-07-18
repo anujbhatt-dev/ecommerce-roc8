@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import {api} from "~/trpc/react"
 
 export default function Interest() {
+    const [page,setPage] = useState(0)
     const setInterest = api.user.setCategoryInterest.useMutation({
         onSettled:() => myCategories.refetch()
     })
@@ -29,7 +30,7 @@ export default function Interest() {
                     <div className="text-[20px] inter font-medium mb-[17px]" >My saved interests!</div>
                     <ul>
                         {/* {JSON.stringify(categories?.data)} */}
-                        {categories?.data?.map((item)=>{
+                        {categories?.data?.slice(page*6,(page*6)+6).map((item)=>{
                             return <div key={item.id} className="flex  mb-[20px] inter capitalize">
                                     <div className="mr-[10px] text-[16px] flex">
                                         {myCategories?.data?.includes(item.id)?
@@ -48,13 +49,15 @@ export default function Interest() {
                     </ul>
                 </div>
                 <div className="flex text-[#333333] gap-[20px] items-center mt-[30px]">
-                        <button>{"<<"}</button>
-                        <button>{"<"}</button>
+                        <button onClick={()=>setPage(0)}>{"<<"}</button>
+                        <button onClick={()=>setPage(0)}>{"<"}</button>
                         <div className="flex gap-[10px]">
-                            <span>1</span><span>2</span><span className="text-black">3</span><span>4</span><span>5</span><span>6</span>
+                            {new Array(7).map((i,idx)=>{
+                                return <span onClick={()=>setPage(page+idx)} key={`pagenumber${idx}`}>{page+idx}</span>
+                            })}
                         </div>
-                        <button>{">"}</button>
-                        <button>{">>"}</button>
+                        <button onClick={()=>setPage(page=>page+1)}>{">"}</button>
+                        <button onClick={()=>setPage(Math.floor((categories?.data?.length as number)/6))}>{">>"}</button>
                 </div>
             </div>
         </main>
