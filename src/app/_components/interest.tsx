@@ -21,6 +21,26 @@ export default function Interest() {
         removeInterest.mutate(id)
     }
 
+    const pageHandler = (opretion:string)=>{
+        if(opretion==">" && Math.floor((categories?.data?.length as number)/6)>page){
+            setPage(page+1)
+        }
+        if(opretion==">>"){
+            setPage(Math.floor((categories?.data?.length as number)/6))
+        }
+        if(opretion=="<" && page>=1){
+            setPage(page-1)
+        }
+        if(opretion=="<<"){
+            setPage(0)
+        }
+        
+    }
+    
+    useEffect(()=>{
+        console.log(page);
+    },[page])
+
     return (
         <main className="flex justify-center">
             <div className="flex flex-col items-center h-[691px] w-[578px] border rounded-[20px]  my-[30px]">
@@ -28,7 +48,7 @@ export default function Interest() {
                 <h1 className="text-[14px] text-[#333] my-[10px] mb-[35px]">We will keep you notified.</h1>
                 <div className="item-start w-[456px]">
                     <div className="text-[20px] inter font-medium mb-[17px]" >My saved interests!</div>
-                    <ul>
+                    <ul className="h-[291px]">
                         {/* {JSON.stringify(categories?.data)} */}
                         {categories?.data?.slice(page*6,(page*6)+6).map((item)=>{
                             return <div key={item.id} className="flex  mb-[20px] inter capitalize">
@@ -49,15 +69,18 @@ export default function Interest() {
                     </ul>
                 </div>
                 <div className="flex text-[#333333] gap-[20px] items-center mt-[30px]">
-                        <button onClick={()=>setPage(0)}>{"<<"}</button>
-                        <button onClick={()=>setPage(0)}>{"<"}</button>
-                        <div className="flex gap-[10px]">
-                            {new Array(7).map((i,idx)=>{
-                                return <span onClick={()=>setPage(page+idx)} key={`pagenumber${idx}`}>{page+idx}</span>
+                        <button onClick={()=>pageHandler("<<")}>{"<<"}</button>
+                        <button onClick={()=>pageHandler("<")}>{"<"}</button>
+                        
+                        <div className={"flex gap-3"}>
+                            {new Array(7).fill(-1).map((item,idx)=>{
+                                if(page+1+idx<=Math.floor((categories?.data?.length as number)/6)+1)
+                                    return <span className={idx==0?"font-bold":""} onClick={()=>{setPage(page+idx)}} key={`pagi${idx}`}>{page+1+idx}</span>
                             })}
                         </div>
-                        <button onClick={()=>setPage(page=>page+1)}>{">"}</button>
-                        <button onClick={()=>setPage(Math.floor((categories?.data?.length as number)/6))}>{">>"}</button>
+                        
+                        <button onClick={()=>pageHandler(">")}>{">"}</button>
+                        <button onClick={()=>pageHandler(">>")}>{">>"}</button>
                 </div>
             </div>
         </main>
