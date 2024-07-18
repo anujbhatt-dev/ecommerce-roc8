@@ -17,8 +17,8 @@ const defaultState = {
         id:-1,
         name:"",
         email:"",
-    },
-    setUser: () => {}
+    },// eslint-disable-next-line @typescript-eslint/no-empty-function
+    setUser: () => { }
 } as UserContextType
 
 export const UserContext = createContext(defaultState)

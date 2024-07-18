@@ -36,7 +36,9 @@ const config = {
           "attributes": false
         }
       }
-    ]
+    ],
+    // Add the rule here
+    "@typescript-eslint/non-nullable-type-assertion-style": "off"
   }
 }
 module.exports = config;
