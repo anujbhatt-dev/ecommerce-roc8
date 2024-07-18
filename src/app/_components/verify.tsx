@@ -3,7 +3,7 @@ import { Suspense, ChangeEvent, KeyboardEvent, useEffect, useState } from 'react
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '~/trpc/react';
 
-export default function Verify() {
+function VerifyOtp() {
     const [digits, setDigits] = useState<number[]>(Array(8).fill(-1));
     const [state, setState] = useState<string>("");
     const router = useRouter();
@@ -63,37 +63,43 @@ export default function Verify() {
     };
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <main className="flex justify-center">
-                <form onSubmit={handleSubmit} className="flex flex-col items-center h-[395px] w-[578px] border rounded-[20px] my-[30px]">
-                    <h1 className="text-[32px] font-semibold my-[15px]">Verify your email</h1>
-                    <h1 className="text-[14px] text-center leading-[19.36px] my-[10px] mb-[20px]">
-                        Enter the 8 digit code you have received on <br /> {state}
-                    </h1>
-                    <label htmlFor="" className='text-[16px] inter mb-[7px] w-[456px]'>Code</label>
-                    <div className='flex justify-between w-[456px] h-[78px]'>
-                        {digits.map((i, idx) => (
-                            <input
-                                id={`input${idx}`}
-                                key={`input${idx}`}
-                                className='flex justify-center items-center text-center border rounded-[6px] gap-[10px] h-[48px] w-[46px]'
-                                type="tel"
-                                maxLength={1}
-                                value={i === -1 ? "" : i}
-                                onChange={(e) => handler(e, idx)}
-                                onKeyDown={(e) => keyHandler(e, idx)}
-                            />
-                        ))}
-                    </div>
+        <main className="flex justify-center">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center h-[395px] w-[578px] border rounded-[20px] my-[30px]">
+                <h1 className="text-[32px] font-semibold my-[15px]">Verify your email</h1>
+                <h1 className="text-[14px] text-center leading-[19.36px] my-[10px] mb-[20px]">
+                    Enter the 8 digit code you have received on <br /> {state}
+                </h1>
+                <label htmlFor="" className='text-[16px] inter mb-[7px] w-[456px]'>Code</label>
+                <div className='flex justify-between w-[456px] h-[78px]'>
+                    {digits.map((i, idx) => (
+                        <input
+                            id={`input${idx}`}
+                            key={`input${idx}`}
+                            className='flex justify-center items-center text-center border rounded-[6px] gap-[10px] h-[48px] w-[46px]'
+                            type="tel"
+                            maxLength={1}
+                            value={i === -1 ? "" : i}
+                            onChange={(e) => handler(e, idx)}
+                            onKeyDown={(e) => keyHandler(e, idx)}
+                        />
+                    ))}
+                </div>
 
-                    <button
-                        type="submit"
-                        className="h-[56px] w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]"
-                    >
-                        VERIFY
-                    </button>
-                </form>
-            </main>
+                <button
+                    type="submit"
+                    className="h-[56px] w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]"
+                >
+                    VERIFY
+                </button>
+            </form>
+        </main>
+    );
+}
+
+export default function Verify() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <VerifyOtp />
         </Suspense>
     );
 }

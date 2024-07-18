@@ -7,8 +7,6 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import Header from "./_components/header";
 import { UserProvider, useUserContext } from "~/context";
-import { useEffect } from "react";
-import { api } from "~/trpc/server";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
