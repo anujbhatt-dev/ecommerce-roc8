@@ -45,10 +45,7 @@ export default function Interest() {
 
     return (
         <main className="flex justify-center">
-            <Toaster
-            position="top-right"
-            reverseOrder={false}
-            />
+            
             <div className="flex flex-col items-center h-[691px] md:w-[578px] border rounded-[20px]  my-[30px] px-3">
                 <h1 className="text-[24px] md:text-[32px] font-semibold my-[15px] text-center">Please mark your interests!</h1>            
                 <h1 className="text-[14px] text-[#333] my-[10px] mb-[35px]">We will keep you notified.</h1>

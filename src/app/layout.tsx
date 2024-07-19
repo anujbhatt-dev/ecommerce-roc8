@@ -7,6 +7,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import Header from "./_components/header";
 import { UserProvider, useUserContext } from "~/context";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -21,9 +22,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
+        <Toaster
+        position="top-right"
+        reverseOrder={false}
+        />
         <UserProvider>
           <TRPCReactProvider>
             <>
+
               <Header/>
               {children}
             </>

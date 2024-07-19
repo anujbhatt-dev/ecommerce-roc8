@@ -6,6 +6,7 @@ import Switch from "./switch"
 // import {TRPCReactProvider} from "~/trpc/react"
 import {api} from "~/trpc/react"
 import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 
 interface FormData {
   name: string;
@@ -23,15 +24,20 @@ export default function Form() {
   }
   const user = api.user.create.useMutation({
     onSuccess:(res)=>{  
+      const query = new URLSearchParams({email:formData.email}).toString();
+      router.push(`/verify?${query}`)
       console.log(res.message);
       setFormData({ name: "", email: "", password: "" })
+    },
+    onError:(error)=>{
+        console.log(error.message);
+        toast.error(error.message)
     }
   });
   
   const submitHandler = ( e: FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
-    const query = new URLSearchParams({email:formData.email}).toString();
-    router.push(`/verify?${query}`)
+    
     console.log(formData );
     user.mutate(formData);
   }
@@ -39,12 +45,12 @@ export default function Form() {
 
   
   return (
-    <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] md:w-[578px] border rounded-[20px]  my-[30px]">
-        <h1 className="text-[32px] font-semibold my-[20px]">Create your account</h1>
+    <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] md:w-[578px] p-3 border rounded-[20px] my-[30px]">
+        <h1 className="text-[24px] md:text-[32px] font-semibold my-[20px]">Create Your Account</h1>
         <FormItem onChange={changeHandler} inputType="text" placeholder="enter your name" label="name" value={formData.name}/>
         <FormItem onChange={changeHandler} inputType="email" placeholder="enter your email" label="email" value={formData.email}/>
         <FormItem onChange={changeHandler} inputType="password" placeholder="enter your password" label="password" value={formData.password}/>
-        <button className="h-[56px] md:w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]">CREATE AN ACCOUNT</button>
+        <button className="h-[56px] w-[256px] md:w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px] ">CREATE AN ACCOUNT</button>
         <Switch text="Having an Account?" route="LOGIN"/>
     </form>
   )

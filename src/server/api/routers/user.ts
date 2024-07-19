@@ -15,8 +15,22 @@ export const userRouter = createTRPCRouter({
     email:z.string().email(),
     password:z.string()
   })).mutation(async ({ctx,input})=>{
-        const {name,email,password} = input
-        try {
+    const {name,email,password} = input
+    try {
+          const checkUser = await ctx.db.user.findUnique({
+            where:{
+              email
+            }
+          })
+          console.log(checkUser);
+          
+          if(checkUser){ 
+              console.log("i am in");
+              throw new TRPCError({
+              code:"BAD_REQUEST",
+              message:"user already exists"
+            })
+          }
           const hashedPassword = await bcrypt.hash(password, 10);
           console.log(input);
           const createdUser = await ctx.db.user.create({
@@ -52,10 +66,14 @@ export const userRouter = createTRPCRouter({
           };
         } catch (error) {
           console.error("Error creating user:", error);
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Failed to create user"
-          });
+          if(error instanceof TRPCError){
+            throw error
+          }else{
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Failed to create user"
+            });
+          }
         }
   }),
 

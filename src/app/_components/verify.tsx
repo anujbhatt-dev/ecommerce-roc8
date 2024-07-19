@@ -14,7 +14,7 @@ function VerifyOtp() {
         if (emailParam) {
             setState(emailParam);
         }else{
-            router.push(`/`);
+            // router.push(`/`);
         }
     }, [searchParams]);
 
@@ -66,18 +66,18 @@ function VerifyOtp() {
 
     return (
         <main className="flex justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col items-center h-[395px] w-[578px] border rounded-[20px] my-[30px]">
-                <h1 className="text-[32px] font-semibold my-[15px]">Verify your email</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center h-[395px] md:w-[578px] border rounded-[20px] mx-[10px] my-[30px] p-3">
+                <h1 className="text-[24px] md:text-[32px] font-semibold my-[15px]">Verify your email</h1>
                 <h1 className="text-[14px] text-center leading-[19.36px] my-[10px] mb-[20px]">
                     Enter the 8 digit code you have received on <br /> {state}
                 </h1>
-                <label htmlFor="" className='text-[16px] inter mb-[7px] w-[456px]'>Code</label>
-                <div className='flex justify-between w-[456px] h-[78px]'>
+                <label htmlFor="" className='text-[16px] inter mb-[7px] md:w-[456px]'>Code</label>
+                <div className='flex gap-[10px] justify-between md:w-[456px] h-[78px]'>
                     {digits.map((i, idx) => (
                         <input
                             id={`input${idx}`}
                             key={`input${idx}`}
-                            className='flex justify-center items-center text-center border rounded-[6px] gap-[10px] h-[48px] w-[46px]'
+                            className='flex justify-center items-center text-center border-2 rounded-[6px] gap-[10px] h-[30px] w-[28px] md:gap-[30px] md:h-[48px] md:w-[46px]'
                             type="tel"
                             maxLength={1}
                             value={i === -1 ? "" : i}
@@ -89,7 +89,7 @@ function VerifyOtp() {
 
                 <button
                     type="submit"
-                    className="h-[56px] w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]"
+                    className="h-[56px] w-[256px] md:w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]"
                 >
                     VERIFY
                 </button>
