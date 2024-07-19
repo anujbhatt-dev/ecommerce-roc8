@@ -13,6 +13,8 @@ function VerifyOtp() {
         const emailParam = searchParams.get('email');
         if (emailParam) {
             setState(emailParam);
+        }else{
+            router.push(`/`);
         }
     }, [searchParams]);
 

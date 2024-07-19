@@ -37,5 +37,5 @@ export default function Profile(){
         })
         router.push("/login")
     }
-    return <div className="flex gap-5 items-center"> {user.name!=""?`Hi, ${user.name}`:""} {user.name!=""?<button onClick={handleLogout} className="border bg-black text-white py-1 px-2 rounded">Logout</button>:<button onClick={()=>router.push("/login")} className="border bg-black text-white py-1 px-2 rounded">Login</button>}</div>
+    return <div className="flex gap-5 items-center mx-2 md:m-0"> {user.name!=""?`Hi, ${user.name}`:""} {user.name!=""?<button onClick={handleLogout} className="border bg-black text-white py-1 px-2 rounded">Logout</button>:null}</div>
 } 

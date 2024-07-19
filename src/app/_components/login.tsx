@@ -53,13 +53,13 @@ export default function Login() {
 
   return (
     <main className="flex justify-center">
-        <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] w-[578px] border rounded-[20px]  my-[30px]">          
+        <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] md:w-[578px] border rounded-[20px]  my-[30px]">          
             <h1 className="text-[32px] font-semibold my-[15px]">Login</h1>
             <h1 className="text-[18px] font-semibold my-[10px]">Welcome to back ECOMMERCE</h1>
             <h1 className="text-[14px] text-[#333] my-[10px] mb-[20px]">The next gen business market place</h1>
             <FormItem onChange={changeHandler} inputType="email" placeholder="enter your email" label="email" value={formData.email}/>
             <FormItem onChange={changeHandler} inputType="password" placeholder="enter your password" label="password" value={formData.password}/>
-            <button className="h-[56px] w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]">LOGIN</button>
+            <button className="h-[56px] w-[256px] md:w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]">LOGIN</button>
             <Switch text="Don't have an Account" route=""/>
         </form>
     </main>

@@ -34,18 +34,17 @@ export default function Form() {
     router.push(`/verify?${query}`)
     console.log(formData );
     user.mutate(formData);
-
   }
 
 
   
   return (
-    <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] w-[578px] border rounded-[20px]  my-[30px]">
+    <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] md:w-[578px] border rounded-[20px]  my-[30px]">
         <h1 className="text-[32px] font-semibold my-[20px]">Create your account</h1>
         <FormItem onChange={changeHandler} inputType="text" placeholder="enter your name" label="name" value={formData.name}/>
         <FormItem onChange={changeHandler} inputType="email" placeholder="enter your email" label="email" value={formData.email}/>
         <FormItem onChange={changeHandler} inputType="password" placeholder="enter your password" label="password" value={formData.password}/>
-        <button className="h-[56px] w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]">CREATE AN ACCOUNT</button>
+        <button className="h-[56px] md:w-[456px] inter font-medium text-white bg-black rounded-[6px] mt-[40px]">CREATE AN ACCOUNT</button>
         <Switch text="Having an Account?" route="LOGIN"/>
     </form>
   )
