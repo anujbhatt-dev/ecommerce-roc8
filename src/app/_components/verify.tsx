@@ -22,7 +22,11 @@ function VerifyOtp() {
 
     const user = api.user.verify.useMutation({
         onSuccess: (res) => {
+            toast.success("verified!")
             router.push(`/login`);
+        },
+        onError:()=>{
+            toast.error("Otp did not match!")
         }
     });
 
