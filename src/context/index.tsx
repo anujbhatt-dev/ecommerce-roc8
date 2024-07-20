@@ -1,4 +1,5 @@
 "use client";
+
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react"
 
 export type User = {
@@ -17,7 +18,8 @@ const defaultState = {
         id:-1,
         name:"",
         email:"",
-    },// eslint-disable-next-line @typescript-eslint/no-empty-function
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setUser: () => { }
 } as UserContextType
 

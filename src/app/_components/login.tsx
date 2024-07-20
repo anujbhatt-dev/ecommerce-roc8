@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie" 
 import { useUserContext } from "~/context";
 import {env} from "~/env"
+import toast from "react-hot-toast";
 
 interface FormData {
   email: string;
@@ -24,18 +25,15 @@ export default function Login() {
           name:res.name,
           email:res.email,
           id:res.id
-        }) 
-        setFormData({ email: "", password: "" })
-        console.log(res);
-        //set cookie named token here
-        Cookies.set('token', res.token , { expires: 1, secure: true, sameSite: 'strict' });
-        Cookies.set('fake', "res.token" , { expires: 1, secure: true, sameSite: 'strict' });
+        })
+        toast.success("success")   
         router.push("/interest")
+        Cookies.set('token', res.token , { expires: 1, secure: true, sameSite: 'strict' });
+        setFormData({ email: "", password: "" })
     },
     onError:(error)=>{
       setFormData({ email: "", password: "" })
-      console.log("error");
-      
+      toast.error(error.message)  
     }
   })
 
@@ -46,10 +44,8 @@ export default function Login() {
 
   const submitHandler = ( e: FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
-    console.log(formData);
     user.mutate(formData);
   }
-
 
   return (
     <main className="flex justify-center">

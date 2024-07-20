@@ -1,4 +1,5 @@
 "use client";
+
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,15 +17,9 @@ export default function Profile(){
             id:res.id
         }) 
         router.push("/interest")
-        },
-        onError:(e)=>{
-            console.log(e);
-            
         }
     })
     useEffect(()=>{
-        console.log(document.cookie);
-        
         auth.mutate()
     },[])
 

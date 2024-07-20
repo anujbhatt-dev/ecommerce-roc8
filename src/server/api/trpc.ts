@@ -78,69 +78,56 @@ interface DecodedToken extends JwtPayload {
 }
 
 export const protectedProcedure = publicProcedure.use(async ({ctx,next}) => {
-  // const { ctx  } = opts;
-
-  const keyValuePairs = ctx.headers.get("cookie")?.split(';');
-
-// Step 2: Initialize a variable to store the token value
-  let token = null;
-
-  // Step 3: Iterate over keyValuePairs to find the token value
-  keyValuePairs?.forEach(pair => {
-      const [key, value] = pair.split('=');
-      if (key?.trim() === "token") {
-          token = value?.trim(); // Extract the token value
-      }
-  });
-  
-  
-  // const token = ctx.headers.get("cookie")?.split('=')[1]
-  // console.log(token,headers);
-  
-  
-  if (!token) {
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "User not authorized"
-    });
-  }
-  
-  let decoded;
   try {
-    decoded = jwt.verify(token, env.JWT_SECRET) as DecodedToken
+    const keyValuePairs = ctx.headers.get("cookie")?.split(';');
+    let token = null;
+    keyValuePairs?.forEach(pair => {
+        const [key, value] = pair.split('=');
+        if (key?.trim() === "token") {
+            token = value?.trim(); 
+        }
+    });
+    if (!token) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User not authorized"
+      });
+    }
+  
+  
+    const decoded = jwt.verify(token, env.JWT_SECRET) as DecodedToken
+    if (!decoded) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User not authorized"
+      });
+    }
+
+    const user = await ctx.db.user.findUnique({
+      where: {
+        id: decoded.userId 
+      }
+    });
+    
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User not authorized"
+      });
+    }
+  
+    return next({
+      ctx: {
+        ...ctx,
+        user
+      },
+    });
   } catch (error) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "User not authorized decode"
     });
   }
-  
-  if (!decoded) {
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "User not authorized"
-    });
-  }
-
-  const user = await ctx.db.user.findUnique({
-    where: {
-      id: decoded.userId 
-    }
-  });
-  
-  if (!user) {
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "User not authorized"
-    });
-  }
-
-  return next({
-    ctx: {
-      ...ctx,
-      user
-    },
-  });
 });
 
 

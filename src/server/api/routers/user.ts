@@ -7,7 +7,6 @@ import {transporter} from "~/server/transporter"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { verify } from "crypto";
 
 export const userRouter = createTRPCRouter({
   create: publicProcedure.input(z.object({
@@ -16,23 +15,20 @@ export const userRouter = createTRPCRouter({
     password:z.string()
   })).mutation(async ({ctx,input})=>{
     const {name,email,password} = input
-    try {
+        try{
           const checkUser = await ctx.db.user.findUnique({
             where:{
               email
             }
           })
-          console.log(checkUser);
-          
           if(checkUser){ 
-              console.log("i am in");
               throw new TRPCError({
               code:"BAD_REQUEST",
               message:"user already exists"
             })
           }
+
           const hashedPassword = await bcrypt.hash(password, 10);
-          console.log(input);
           const createdUser = await ctx.db.user.create({
             data: {
               name,
@@ -40,9 +36,9 @@ export const userRouter = createTRPCRouter({
               password: hashedPassword
             },
           });
+          
           const otp = otpGenerator.generate(8,{digits:true, lowerCaseAlphabets:false,upperCaseAlphabets:false, specialChars:false})
           const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-          
           const crteOtp = await ctx.db.otp.create({
             data:{
               otp:otp,
@@ -50,7 +46,12 @@ export const userRouter = createTRPCRouter({
               userId:createdUser.id
             }
           })
-          console.log(otp);
+          if(!crteOtp){
+            throw new TRPCError({
+              code:"INTERNAL_SERVER_ERROR",
+              message:"problem creating otp"
+            })
+          }
           
           const verification = await transporter.sendMail({
             from: env.SMTP_EMAIL,
@@ -59,13 +60,18 @@ export const userRouter = createTRPCRouter({
             text: `Here is your verification code: ${otp}`,
             html: `<p>Here is your verification code: <b>${otp}</b></p>`,
           });
-          console.log(verification.response);
+          if(!verification){
+            throw new TRPCError({
+              code:"INTERNAL_SERVER_ERROR",
+              message:"problem sending mail"
+            })
+          }
           
           return {
             message: "User created successfully!"
-          };
-        } catch (error) {
-          console.error("Error creating user:", error);
+          }
+        }
+        catch (error) {
           if(error instanceof TRPCError){
             throw error
           }else{
@@ -121,7 +127,7 @@ export const userRouter = createTRPCRouter({
           return {
               success:true
           }
-        } catch (error) {
+        }catch(error) {
           if(error instanceof TRPCError){
             throw error
           }else{
@@ -143,10 +149,10 @@ export const userRouter = createTRPCRouter({
       try {
         const user = await ctx.db.user.findUnique({
           where: {
-            email
+            email,
+            isVerified:true
           }
         });
-  
         if (!user) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -164,17 +170,14 @@ export const userRouter = createTRPCRouter({
   
         const token = jwt.sign({ userId: user.id, name: user.name }, env.JWT_SECRET, { expiresIn: "1h" });
         
-        
-
-  
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           token
         };
-      } catch (error) {
-        console.error("Login error:", error);
+
+      }catch (error){
         if (error instanceof TRPCError) {
           throw error;
         } else {
@@ -202,7 +205,9 @@ export const userRouter = createTRPCRouter({
           },
       })
       const categories = myCategories.map(item => item.categoryId)
+
       return [...categories]
+
   }),
 
   setCategoryInterest:protectedProcedure.input(z.number()).mutation(async ({ctx,input})=>{
@@ -212,7 +217,9 @@ export const userRouter = createTRPCRouter({
             categoryId:input
         }
     })
+    
     return interest
+
   }),
 
   removeCategoryInterest:protectedProcedure.input(z.number()).mutation(async ({ctx,input})=>{
@@ -222,6 +229,8 @@ export const userRouter = createTRPCRouter({
             categoryId:input
         }
     })
+    
     return interest
+    
   })
 });

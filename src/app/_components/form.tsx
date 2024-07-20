@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import FormItem from "./formItem"
 import Switch from "./switch"
-// import {TRPCReactProvider} from "~/trpc/react"
+
 import {api} from "~/trpc/react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
@@ -17,33 +17,30 @@ interface FormData {
 export default function Form() {
   const [formData, setFormData] = useState<FormData>({ name: "", email: "", password: "" })
   const router = useRouter()
-  
+
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) =>{
     const { name, value } = e.target;
     setFormData(prevState=> {return { ...prevState, [name]: value }}); 
   }
+
   const user = api.user.create.useMutation({
     onSuccess:(res)=>{  
       const query = new URLSearchParams({email:formData.email}).toString();
+      toast.success("success")
       router.push(`/verify?${query}`)
-      console.log(res.message);
       setFormData({ name: "", email: "", password: "" })
     },
     onError:(error)=>{
-        console.log(error.message);
         toast.error(error.message)
     }
   });
   
   const submitHandler = ( e: FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
-    
     console.log(formData );
     user.mutate(formData);
   }
 
-
-  
   return (
     <form onSubmit={submitHandler} className="flex flex-col items-center h-[691px] md:w-[578px] p-3 border rounded-[20px] my-[30px]">
         <h1 className="text-[24px] md:text-[32px] font-semibold my-[20px]">Create Your Account</h1>

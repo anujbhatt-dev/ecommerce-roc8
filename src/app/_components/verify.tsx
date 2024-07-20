@@ -1,7 +1,9 @@
 "use client";
+
 import { Suspense, ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '~/trpc/react';
+import toast from 'react-hot-toast';
 
 function VerifyOtp() {
     const [digits, setDigits] = useState<number[]>(Array(8).fill(-1));
@@ -14,13 +16,12 @@ function VerifyOtp() {
         if (emailParam) {
             setState(emailParam);
         }else{
-            // router.push(`/`);
+            router.push(`/`);
         }
     }, [searchParams]);
 
     const user = api.user.verify.useMutation({
         onSuccess: (res) => {
-            console.log(res);
             router.push(`/login`);
         }
     });
@@ -53,14 +54,13 @@ function VerifyOtp() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        user.mutate({
-            email: state,
-            otp: digits.join("").toString()
-        });
         if (digits.every(digit => digit >= 0)) {
-            // Add form submission logic here
+            user.mutate({
+                email: state,
+                otp: digits.join("").toString()
+            });
         } else {
-            alert('Please complete all 8 digits.');
+            toast.error('Please complete all 8 digits.');
         }
     };
 

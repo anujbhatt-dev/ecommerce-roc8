@@ -1,12 +1,10 @@
 import Link from "next/link"
-
 import React from 'react'
 
 type Route = {
     route:string,
     text:string
 }
-
 
 export default function Switch({route,text}:Route) {
   return (

@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import {api} from "~/trpc/react"
@@ -38,10 +39,6 @@ export default function Interest() {
         }
         
     }
-    
-    useEffect(()=>{
-        console.log(page);
-    },[page])
 
     return (
         <main className="flex justify-center">

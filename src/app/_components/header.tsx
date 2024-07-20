@@ -1,9 +1,6 @@
 import Profile from "./profile"
 
-
 export default function Header() {
-  
-
   return (
     <div className="md:mx-[50px]">
         <div className="flex justify-end text-[#333333] inter gap-[20px] text-[12px] h-[36px] items-center ">
@@ -12,7 +9,7 @@ export default function Header() {
             <Profile/>
         </div>
 
-
+        
         <div className="flex flex-col md:flex-row justify-between items-center  md:h-[64px] gap-[10px]">
                 <div className="text-[30px] md:text-[32px] font-bold inter">ECOMMERCE</div>
                 <ul className="flex justify-between gap-[10px] md:gap-[30px] text-[12px] sm:text-[16px] font-semibold inter md:-ml-[110px]">
