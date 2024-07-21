@@ -19,7 +19,7 @@ export default function Profile(){
         router.push("/interest")
         },
         onError:()=>{
-        router.push("/login")
+        router.push("/")
         }
     })
     useEffect(()=>{
